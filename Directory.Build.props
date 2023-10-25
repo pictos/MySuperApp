@@ -12,7 +12,7 @@
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <DebugType>portable</DebugType>
     <DebugSymbols>True</DebugSymbols>
 
