@@ -1,0 +1,10 @@
+{
+  "profiles": {
+	"MySuperApp.Windows (Package)": {
+	  "commandName": "MsixPackage"
+	},
+	"MySuperApp.Windows (Unpackaged)": {
+	  "commandName": "Project"
+	}
+  }
+}
