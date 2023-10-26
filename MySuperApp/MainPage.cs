@@ -6,29 +6,37 @@ public sealed partial class MainPage : Page
 {
     public MainPage()
     {
-        this.DataContext = new ViewModel();
-        this
+        this.DataContext(new ViewModel(), (page, vm) =>
+        {
+            page
             .Background(ThemeResource.Get<Brush>("ApplicationPageBackgroundThemeBrush"))
-            .Content(MainContent())
+            .Content(MainContent(vm))
             .Padding(58);
+        });
     }
 
     CancellationTokenSource cts = new();
-    Grid MainContent()
+    Grid MainContent(ViewModel vm)
     {
         var grid = new Grid();
-
-        grid.Margin(10).RowDefinitions("Auto, *")
-            .Children(
-                SearchView().Grid(row: 0, column: 0),
-                Results().Grid(row: 1, column: 0)
+        grid.Margin(10).RowDefinitions("Auto, *, Auto")
+            .Children
+            (
+                SearchView(vm).Grid(0, 0),
+                Results(vm).Grid(1, 0),
+                SearchButton(vm).Grid(2, 0).Assign(out var btn)
+            ).VisualStateManager
+            (b =>
+                b.Group("ButtonState", gb =>
+                    gb.State("Entered", sb => sb.Setters(btn, e => e.Width(1500)))
+                        .State("Exited", sb => sb.Setters(btn, e => e.Width(200))))
             );
 
         return grid;
 
-        TextBox SearchView()
+        TextBox SearchView(ViewModel vm)
         {
-            var textBox = new TextBox().FontSize(10);
+            var textBox = new TextBox().FontSize(10).Text(() => vm.SearchText);
 
             textBox.TextChanged += (s, e) =>
             {
@@ -61,29 +69,43 @@ public sealed partial class MainPage : Page
             return textBox;
         }
 
-        ListView Results()
+        static ListView Results(ViewModel vm)
         {
             var listView = new ListView();
 
-            var source = ((ViewModel)DataContext).Items;
-
-            listView.ItemTemplate(() =>
-            {
-                var txt = new TextBlock();
-                txt.SetBinding(TextBlock.TextProperty, new Binding());
-                return txt;
-            })
-            .ItemsSource(source);
+            listView
+            .ItemTemplate<string>((str) => new TextBlock().Text(() => str))
+            .ItemsSource(() => vm.Items);
 
             return listView;
+        }
+
+        Button SearchButton(ViewModel vm)
+        {
+            var btn = new Button().Content("Find")
+                .HorizontalAlignment(HorizontalAlignment.Center)
+                .MinWidth(200);
+
+            btn.Click += (s, e) =>
+            {
+                _ = vm.DoSearch(vm.SearchText);
+            };
+
+            btn.PointerEntered += (_, __) => VisualStateManager.GoToState(this, "Entered", true);
+
+            btn.PointerExited += (_, __) => VisualStateManager.GoToState(this, "Exited", true);
+
+            return btn;
         }
     }
 }
 
 class ViewModel
 {
+    public string SearchText { get; set; } = string.Empty;
     public string Title { get; } = "My Super App";
     public ObservableCollection<string> Items { get; set; } = new() { "Hello", "World" };
+
 
     public async Task DoSearch(string value)
     {

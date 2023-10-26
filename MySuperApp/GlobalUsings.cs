@@ -1,4 +1,4 @@
-﻿global using System.Collections.Immutable;
+global using System.Collections.Immutable;
 global using System.Windows.Input;
 global using Microsoft.Extensions.DependencyInjection;
 global using Windows.Networking.Connectivity;
@@ -16,3 +16,4 @@ global using Uno.Themes.Markup;
 global using Windows.ApplicationModel;
 global using ApplicationExecutionState = Windows.ApplicationModel.Activation.ApplicationExecutionState;
 global using Color = Windows.UI.Color;
+global using static MySuperApp.CSharpMarkupThatILike;
