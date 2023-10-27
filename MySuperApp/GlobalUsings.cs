@@ -17,3 +17,6 @@ global using Windows.ApplicationModel;
 global using ApplicationExecutionState = Windows.ApplicationModel.Activation.ApplicationExecutionState;
 global using Color = Windows.UI.Color;
 global using static MySuperApp.CSharpMarkupThatILike;
+global using MySuperApp.Controls;
+global using MySuperApp.ViewModels;
+global using MySuperApp.Pages;

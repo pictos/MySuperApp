@@ -37,69 +37,66 @@ public sealed partial class MainPage : Page
     }
 
     TextBox SearchView(ViewModel vm)
+    {
+        var textBox = new TextBox().FontSize(10).Text(() => vm.SearchText);
+
+        textBox.TextChanged += (s, e) =>
         {
-            var textBox = new TextBox().FontSize(10).Text(() => vm.SearchText);
+            var tb = (TextBox)s;
+            if (tb.DataContext is not ViewModel vm)
+                return;
 
-            textBox.TextChanged += (s, e) =>
+            cts?.Cancel();
+
+            cts = new();
+
+            Task.Delay(1000, cts.Token).ContinueWith(task =>
             {
-                var tb = (TextBox)s;
-                if (tb.DataContext is not ViewModel vm)
-                    return;
-
-                if (cts is not null)
+                if (task.IsFaulted && task.Exception != null)
                 {
-                    cts.Cancel();
+                    throw task.Exception;
                 }
 
-                cts = new();
-
-                Task.Delay(1000, cts.Token).ContinueWith(task =>
+                if (task.Status == TaskStatus.Canceled)
                 {
-                    if (task.IsFaulted && task.Exception != null)
-                    {
-                        throw task.Exception;
-                    }
+                    return;
+                }
+                _ = vm.DoSearch(tb.Text);
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+        };
 
-                    if (task.Status == TaskStatus.Canceled)
-                    {
-                        return;
-                    }
-                    _ = vm.DoSearch(tb.Text);
-                }, TaskScheduler.FromCurrentSynchronizationContext());
-            };
-
-            return textBox;
-        }
-
-        static ListView Results(ViewModel vm)
-        {
-            var listView = new ListView();
-
-            listView
-            .ItemTemplate<string>((str) => new TextBlock().Text(() => str))
-            .ItemsSource(() => vm.Items);
-
-            return listView;
-        }
-
-        Button SearchButton(ViewModel vm)
-        {
-            var btn = new Button().Content("Find")
-                .HorizontalAlignment(HorizontalAlignment.Center)
-                .MinWidth(200);
-
-            btn.Click += (s, e) =>
-            {
-                _ = vm.DoSearch(vm.SearchText);
-            };
-
-            btn.PointerEntered += (_, __) => VisualStateManager.GoToState(this, "Entered", true);
-
-            btn.PointerExited += (_, __) => VisualStateManager.GoToState(this, "Exited", true);
-
-            return btn;
-        }
+        return textBox;
     }
+
+    static ListView Results(ViewModel vm)
+    {
+        var listView = new ListView();
+
+        listView
+        .ItemTemplate<string>((str) => new TextBlock().Text(() => str))
+        .ItemsSource(() => vm.Items);
+
+        return listView;
+    }
+
+    Button SearchButton(ViewModel vm)
+    {
+        var btn = new Button().Content("Find")
+            .HorizontalAlignment(HorizontalAlignment.Center)
+            .MinWidth(200);
+
+        btn.Click += (s, e) =>
+        {
+            _ = vm.DoSearch(vm.SearchText);
+        };
+
+        btn.PointerEntered += (_, __) => VisualStateManager.GoToState(this, "Entered", true);
+
+        btn.PointerExited += (_, __) => VisualStateManager.GoToState(this, "Exited", true);
+
+        return btn;
+    }
+}
 
 
 class ViewModel

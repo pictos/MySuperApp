@@ -4,7 +4,7 @@ namespace MySuperApp;
 
 static class CSharpMarkupThatILike
 {
-    public static T Grid<T>(this T element, int row, int column)
+    public static T Grid<T>(this T element, int row = 0, int column = 0)
         where T : UIElement
     {
         element.SetValue(MGrid.ColumnProperty, column);
