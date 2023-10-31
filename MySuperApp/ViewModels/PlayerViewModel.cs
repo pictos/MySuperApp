@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-
 namespace MySuperApp.ViewModels
 {
     internal class PlayerViewModel

@@ -25,7 +25,7 @@
     <PackageVersion Include="Uno.WinUI.Skia.Gtk" Version="5.1.0-dev.8" />
     <PackageVersion Include="Uno.WinUI.WebAssembly" Version="5.1.0-dev.8" />
     <PackageVersion Include="Xamarin.Google.Android.Material" Version="1.9.0.2" />
-    <PackageVersion Include="Uno.Extensions.Markup.Generators" Version="5.0.0-dev.536"/>
+    <!--<PackageVersion Include="Uno.Extensions.Markup.Generators" Version="5.0.0-dev.536"/>-->
     <PackageVersion Include="SkiaSharp.Views.WinUI" Version="2.88.6" />
   </ItemGroup>
 </Project>

@@ -1,14 +1,10 @@
 using SkiaSharp;
 using SkiaSharp.Views.Windows;
-using Uno.Extensions.Markup.Generator;
-
-[assembly: GenerateMarkupForAssembly(typeof(CircleProgress))]
 
 namespace MySuperApp.Controls;
 
 public partial class CircleProgress : SKXamlCanvas
 {
-
     const float StartAngle = 15;
     const float SweepAngle = 270;
     const float baseSize = 100f;

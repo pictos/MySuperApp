@@ -46,8 +46,10 @@ namespace MySuperApp.Pages
 
                 static CircleImage CreateCircleImage(PlayerViewModel vm)
                 {
-                    var ci = new CircleImage().Margin(10);
-                    ci.SetValue(CircleImage.SourceProperty, "https://avatars.githubusercontent.com/u/20712372?v=4");
+                    var source = "https://avatars.githubusercontent.com/u/20712372?v=4";
+
+                    var ci = new CircleImage().Margin(10).Background(ThemeResource.Get<Brush>("ApplicationPageBackgroundThemeBrush"));
+                    ci.SetValue(CircleImage.SourceProperty, source);
 
                     return ci;
                 }

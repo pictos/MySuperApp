@@ -1,8 +1,6 @@
 using SkiaSharp;
 using SkiaSharp.Views.Windows;
-using Uno.Extensions.Markup.Generator;
 
-[assembly: GenerateMarkupForAssembly(typeof(CircleImage))]
 namespace MySuperApp.Controls;
 
 public partial class CircleImage : SKXamlCanvas
