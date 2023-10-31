@@ -19,21 +19,23 @@ public sealed partial class MainPage : Page
 
     Grid MainContent(ViewModel vm1)
     {
-        return new Grid().DataContext<ViewModel>((grid, vm) =>
-        {
-            grid.Margin(10).RowDefinitions("Auto, *, Auto")
-                .Children
-                (
-                    SearchView(vm1).Grid(0, 0),
-                    Results(vm).Grid(1, 0),
-                    SearchButton(vm).Grid(2, 0).Assign(out var btn)
-                ).VisualStateManager
-                (b =>
-                    b.Group("ButtonState", gb =>
-                        gb.State("Entered", sb => sb.Setters(btn, e => e.Width(1500)))
-                            .State("Exited", sb => sb.Setters(btn, e => e.Width(200))))
-                );
-        });
+
+        return new Grid();
+        //return new Grid().DataContext<ViewModel>((grid, vm) =>
+        //{
+        //    grid.Margin(10).RowDefinitions("Auto, *, Auto")
+        //        .Children
+        //        (
+        //            SearchView(vm1).Grid(0, 0),
+        //            Results(vm).Grid(1, 0),
+        //            SearchButton(vm).Grid(2, 0).Assign(out var btn)
+        //        ).VisualStateManager
+        //        (b =>
+        //            b.Group("ButtonState", gb =>
+        //                gb.State("Entered", sb => sb.Setters(btn, e => e.Width(1500)))
+        //                    .State("Exited", sb => sb.Setters(btn, e => e.Width(200))))
+        //        );
+        //});
     }
 
     TextBox SearchView(ViewModel vm)
