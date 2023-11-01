@@ -3,12 +3,15 @@ namespace MySuperApp.Pages
 {
     internal partial class PlayerPage : Page
     {
+        static SolidColorBrush backgroundColor = default!;
         public PlayerPage()
         {
+            backgroundColor = (SolidColorBrush)Resources["ApplicationPageBackgroundThemeBrush"];
+
             this.DataContext(new PlayerViewModel(), (page, vm) =>
             {
                 page
-                .Background(ThemeResource.Get<Brush>("ApplicationPageBackgroundThemeBrush"))
+                .Background(backgroundColor)
                 .Content(MainContent(vm))
                 .Padding(58);
             });
@@ -23,7 +26,10 @@ namespace MySuperApp.Pages
         {
             return new Grid().Children
                 (
-                    CreateCircleImage(vm).Grid(),
+                    new CircleImage().Margin(10)
+                    .Source(() => vm.Source)
+                    .Background(backgroundColor)
+                    .Grid(),
                     new Button().Content("Play")
                     .Width(60).Height(60)
                     .HorizontalAlignment(HorizontalAlignment.Center)
@@ -35,13 +41,6 @@ namespace MySuperApp.Pages
                     PlayerCommands().Grid(2)
                 ).RowDefinitions("*, 48");
         }
-
-
-        static CircleImage CreateCircleImage(PlayerViewModel vm)
-        {
-            return new CircleImage().Margin(10).Background(ThemeResource.Get<Brush>("ApplicationPageBackgroundThemeBrush")).Source(() => vm.Source);
-        }
-
 
         static Grid MusicInfo(PlayerViewModel vm) => new Grid().Children
             (
@@ -61,7 +60,6 @@ namespace MySuperApp.Pages
             .Orientation(Orientation.Horizontal)
             .Spacing(5)
             .HorizontalAlignment(HorizontalAlignment.Center);
-
     }
 }
 

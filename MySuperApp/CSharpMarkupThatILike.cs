@@ -11,4 +11,12 @@ static class CSharpMarkupThatILike
         element.SetValue(MGrid.RowProperty, row);
         return element;
     }
+
+    public static NavigationView MenuItems(this NavigationView view, params NavigationViewItem[] items)
+    {
+        foreach (var item in items)
+            view.MenuItems.Add(item);
+
+        return view;
+    }
 }

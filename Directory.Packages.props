@@ -26,6 +26,8 @@
     <PackageVersion Include="Uno.WinUI.WebAssembly" Version="5.1.0-dev.137" />
     <PackageVersion Include="Xamarin.Google.Android.Material" Version="1.9.0.2" />
     <PackageVersion Include="Uno.Extensions.Markup.Generators" Version="5.1.0-dev.36"/>
+    <PackageVersion Include="Uno.Material.WinUI.Markup" Version="4.1.0-dev.1" />
+    <PackageVersion Include="Uno.Themes.WinUI.Markup" Version="4.1.0-dev.1" />
     <PackageVersion Include="SkiaSharp.Views.WinUI" Version="2.88.6" />
   </ItemGroup>
 </Project>

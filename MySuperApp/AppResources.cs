@@ -1,3 +1,5 @@
+using Uno.Material;
+
 namespace MySuperApp;
 
 public sealed class AppResources : ResourceDictionary
@@ -6,6 +8,6 @@ public sealed class AppResources : ResourceDictionary
     {
         // Load WinUI Resources
         this.Build(r => r.Merged(
-            new XamlControlsResources()));
+            new XamlControlsResources(), new MaterialTheme()));
     }
 }

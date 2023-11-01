@@ -4,6 +4,8 @@ public class App : Application
 {
     protected Window? MainWindow { get; private set; }
 
+    internal static bool IsLoaded { get; private set; }
+
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
 #if NET6_0_OR_GREATER && WINDOWS && !HAS_UNO
@@ -31,11 +33,19 @@ public class App : Application
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
             // parameter
-            rootFrame.Navigate(typeof(PlayerPage), args.Arguments);
+
+            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+            {
+                Console.WriteLine($"First chance exception: {eventArgs.Exception}");
+            };
+
+            rootFrame.Content = new Shell();
+            //rootFrame.Navigate(typeof(PlayerPage), args.Arguments);
         }
 
         // Ensure the current window is active
         MainWindow.Activate();
+        IsLoaded = true;
     }
 
     /// <summary>
