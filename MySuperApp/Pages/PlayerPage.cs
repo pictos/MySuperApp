@@ -7,10 +7,10 @@ namespace MySuperApp.Pages;
 internal partial class PlayerPage : Page
 {
     static SolidColorBrush backgroundColor = default!;
-    private CircleImage circleImage;
+    CircleImage circleImage = default!;
     readonly Storyboard storyboard;
     
-    static Style<Button> buttonStyle = new Style<Button>()
+    static readonly Style<Button> buttonStyle = new Style<Button>()
         .Setters(s =>
             s.MinWidth(50).MinHeight(50).Foreground(Colors.Black).Background(Colors.Transparent).BorderThickness(0));
 
@@ -29,10 +29,12 @@ internal partial class PlayerPage : Page
 
         this.Resources(r => r.Add("rotateImg", storyboard).Add(buttonStyle));
         storyboard.Begin();
+
         Grid MainContent(PlayerViewModel vm) => new Grid().Children
-            (
-                CircleImageGrid(vm).Grid(1)
-            ).RowDefinitions("100,*,100");
+        (
+            CircleImageGrid(vm).Grid(1)
+        ).RowDefinitions("100,*,100")
+            .Resources(r => r.Add(buttonStyle));
 
 
         Storyboard RotateAnimation()
@@ -63,9 +65,8 @@ internal partial class PlayerPage : Page
                 .Assign(out circleImage)
                 .Source(() => vm.Source)
                 .Background(backgroundColor)
-                .RenderTransformOrigin(new Windows.Foundation.Point(.5, .5))
-                .RenderTransform(new RotateTransform())
                 .Grid(),
+                
                 new Button().Content("Play")
                 .Width(60).Height(60).Assign(out var btn)
                 .HorizontalAlignment(HorizontalAlignment.Center)
@@ -78,8 +79,6 @@ internal partial class PlayerPage : Page
             btn.Click += (s, e) => storyboard.Begin();
 
         return grid;
-
-
     }
 
     static Grid MusicInfo(PlayerViewModel vm) => new Grid().Children

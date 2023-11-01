@@ -13,12 +13,13 @@ partial class Shell : Page
         new NavigationView()
             .Assign(out var navigationView)
             .IsSettingsVisible(false)
-            .PaneDisplayMode(NavigationViewPaneDisplayMode.Top)
-            .MenuItems(new[]
-            {
+            .IsBackButtonVisible(NavigationViewBackButtonVisible.Collapsed)
+            .PaneDisplayMode(NavigationViewPaneDisplayMode.LeftMinimal)
+            .MenuItems
+            (
                 new NavigationViewItem().Content(Player),
-                new NavigationViewItem().Content(Search),
-            })
+                new NavigationViewItem().Content(Search)
+            )
             .Content
             (
                 new Grid().Children
