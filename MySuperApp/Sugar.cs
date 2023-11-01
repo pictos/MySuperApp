@@ -2,7 +2,7 @@ using MGrid = Microsoft.UI.Xaml.Controls.Grid;
 
 namespace MySuperApp;
 
-static class CSharpMarkupThatILike
+static class Sugar
 {
     public static T Grid<T>(this T element, int row = 0, int column = 0)
         where T : UIElement
