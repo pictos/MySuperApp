@@ -30,16 +30,13 @@ public class App : Application
 
         if (rootFrame.Content == null)
         {
+            // The navigate method is throwing on Windows
+            rootFrame.Content = new Shell();
+
+
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
             // parameter
-
-            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
-            {
-                Console.WriteLine($"First chance exception: {eventArgs.Exception}");
-            };
-
-            rootFrame.Content = new Shell();
             //rootFrame.Navigate(typeof(PlayerPage), args.Arguments);
         }
 

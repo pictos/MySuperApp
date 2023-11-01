@@ -1,65 +1,102 @@
 
-namespace MySuperApp.Pages
+using Microsoft.UI.Xaml.Documents;
+using Microsoft.UI.Xaml.Media.Animation;
+
+namespace MySuperApp.Pages;
+
+internal partial class PlayerPage : Page
 {
-    internal partial class PlayerPage : Page
+    static SolidColorBrush backgroundColor = default!;
+    private CircleImage circleImage;
+    readonly Storyboard storyboard;
+
+    public PlayerPage()
     {
-        static SolidColorBrush backgroundColor = default!;
-        public PlayerPage()
+        
+
+        backgroundColor = (SolidColorBrush)Resources["ApplicationPageBackgroundThemeBrush"];
+
+        this.DataContext(new PlayerViewModel(), (page, vm) =>
         {
-            backgroundColor = (SolidColorBrush)Resources["ApplicationPageBackgroundThemeBrush"];
+            page
+            .Background(backgroundColor)
+            .Content(MainContent(vm))
+            .Padding(58);
 
-            this.DataContext(new PlayerViewModel(), (page, vm) =>
-            {
-                page
-                .Background(backgroundColor)
-                .Content(MainContent(vm))
-                .Padding(58);
-            });
+        });
+        storyboard = RotateAnimation();
 
-            static Grid MainContent(PlayerViewModel vm) => new Grid().Children
-                (
-                    CircleImageGrid(vm).Grid(1)
-                ).RowDefinitions("100,*,100");
-        }
+        this.Resources.Add("rotateImg", storyboard);
+        storyboard.Begin();
+        Grid MainContent(PlayerViewModel vm) => new Grid().Children
+            (
+                CircleImageGrid(vm).Grid(1)
+            ).RowDefinitions("100,*,100");
 
-        static Grid CircleImageGrid(PlayerViewModel vm)
+
+        Storyboard RotateAnimation()
         {
-            return new Grid().Children
+            var storyboard = new Storyboard().Children
                 (
-                    new CircleImage().Margin(10)
-                    .Source(() => vm.Source)
-                    .Background(backgroundColor)
-                    .Grid(),
-                    new Button().Content("Play")
-                    .Width(60).Height(60)
-                    .HorizontalAlignment(HorizontalAlignment.Center)
-                    .VerticalAlignment(VerticalAlignment.Center)
-                    .Background("#DE5154")
-                    .CornerRadius(30),
-                    //.Command()
-                    MusicInfo(vm).Grid(1),
-                    PlayerCommands().Grid(2)
-                ).RowDefinitions("*, 48");
+                    new DoubleAnimation().Assign(out var animation)
+                    .From(0)
+                    .To(360)
+                    .Duration(new Duration(TimeSpan.FromSeconds(5)))
+                    .RepeatBehavior(RepeatBehavior.Forever)
+                );
+
+            Storyboard.SetTarget(animation, circleImage);
+            Storyboard.SetTargetProperty(animation, "(UIElement.RenderTransform).(RotateTransform.Angle)");
+            return storyboard;
         }
-
-        static Grid MusicInfo(PlayerViewModel vm) => new Grid().Children
-            (
-                new TextBlock().VerticalAlignment(VerticalAlignment.Center).FontSize(16).Text(() => vm.CurrentTime).Grid(),
-                new Button().Background(Colors.Transparent).CommandParameter("REPEAT").FontSize(16).Grid(0, 3),
-                new TextBlock().VerticalAlignment(VerticalAlignment.Center).FontSize(16)
-            ).ColumnDefinitions("Auto, *, Auto, Auto, *, Auto, 5");
-
-
-        static StackPanel PlayerCommands() => new StackPanel().Children
-            (
-                new Button().CommandParameter("BACK"),
-                new Button().CommandParameter("BACKWARD"),
-                new Button().CommandParameter("FORWARD"),
-                new Button().CommandParameter("NEXT")
-            )
-            .Orientation(Orientation.Horizontal)
-            .Spacing(5)
-            .HorizontalAlignment(HorizontalAlignment.Center);
     }
-}
 
+
+    Grid CircleImageGrid(PlayerViewModel vm)
+    {
+        
+        var grid = new Grid().Children
+            (
+                new CircleImage().Margin(10)
+                .Name("circleImg")
+                .Assign(out circleImage)
+                .Source(() => vm.Source)
+                .Background(backgroundColor)
+                .RenderTransformOrigin(new Windows.Foundation.Point(.5, .5))
+                .RenderTransform(new RotateTransform())
+                .Grid(),
+                new Button().Content("Play")
+                .Width(60).Height(60).Assign(out var btn)
+                .HorizontalAlignment(HorizontalAlignment.Center)
+                .VerticalAlignment(VerticalAlignment.Center)
+                .Background("#DE5154")
+                .CornerRadius(30),
+                MusicInfo(vm).Grid(1),
+                PlayerCommands().Grid(2)
+            ).RowDefinitions("*, 48");
+            btn.Click += (s, e) => storyboard.Begin();
+
+        return grid;
+
+
+    }
+
+    static Grid MusicInfo(PlayerViewModel vm) => new Grid().Children
+        (
+            new TextBlock().VerticalAlignment(VerticalAlignment.Center).FontSize(16).Text(() => vm.CurrentTime).Grid(),
+            new Button().Background(Colors.Transparent).CommandParameter("REPEAT").FontSize(16).Grid(0, 3),
+            new TextBlock().VerticalAlignment(VerticalAlignment.Center).FontSize(16)
+        ).ColumnDefinitions("Auto, *, Auto, Auto, *, Auto, 5");
+
+
+    static StackPanel PlayerCommands() => new StackPanel().Children
+        (
+            new Button().CommandParameter("BACK"),
+            new Button().CommandParameter("BACKWARD"),
+            new Button().CommandParameter("FORWARD"),
+            new Button().CommandParameter("NEXT")
+        )
+        .Orientation(Orientation.Horizontal)
+        .Spacing(5)
+        .HorizontalAlignment(HorizontalAlignment.Center);
+}
