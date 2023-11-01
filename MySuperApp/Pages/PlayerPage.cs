@@ -12,8 +12,6 @@ internal partial class PlayerPage : Page
 
     public PlayerPage()
     {
-        
-
         backgroundColor = (SolidColorBrush)Resources["ApplicationPageBackgroundThemeBrush"];
 
         this.DataContext(new PlayerViewModel(), (page, vm) =>
@@ -22,11 +20,10 @@ internal partial class PlayerPage : Page
             .Background(backgroundColor)
             .Content(MainContent(vm))
             .Padding(58);
-
         });
         storyboard = RotateAnimation();
 
-        this.Resources.Add("rotateImg", storyboard);
+        this.Resources(r => r.Add("rotateImg", storyboard));
         storyboard.Begin();
         Grid MainContent(PlayerViewModel vm) => new Grid().Children
             (
