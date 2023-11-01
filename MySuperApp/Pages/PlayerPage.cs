@@ -9,6 +9,10 @@ internal partial class PlayerPage : Page
     static SolidColorBrush backgroundColor = default!;
     private CircleImage circleImage;
     readonly Storyboard storyboard;
+    
+    static Style<Button> buttonStyle = new Style<Button>()
+        .Setters(s =>
+            s.MinWidth(50).MinHeight(50).Foreground(Colors.Black).Background(Colors.Transparent).BorderThickness(0));
 
     public PlayerPage()
     {
@@ -23,7 +27,7 @@ internal partial class PlayerPage : Page
         });
         storyboard = RotateAnimation();
 
-        this.Resources(r => r.Add("rotateImg", storyboard));
+        this.Resources(r => r.Add("rotateImg", storyboard).Add(buttonStyle));
         storyboard.Begin();
         Grid MainContent(PlayerViewModel vm) => new Grid().Children
             (
