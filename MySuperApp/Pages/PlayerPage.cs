@@ -27,8 +27,8 @@ internal partial class PlayerPage : Page
         });
         storyboard = RotateAnimation();
 
-        this.Resources(r => r.Add("rotateImg", storyboard).Add(buttonStyle));
-        storyboard.Begin();
+        this.Resources(r => r.Add("rotateImg",   storyboard).Add(buttonStyle));
+       // storyboard.Begin();
 
         Grid MainContent(PlayerViewModel vm) => new Grid().Children
         (

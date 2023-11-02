@@ -31,13 +31,13 @@ public class App : Application
         if (rootFrame.Content == null)
         {
             // The navigate method is throwing on Windows
-            rootFrame.Content = new Shell();
+            rootFrame.Content = new SearchPage();
 
 
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
             // parameter
-            //rootFrame.Navigate(typeof(PlayerPage), args.Arguments);
+            //rootFrame.Navigate(typeof(SearchPage), args.Arguments);
         }
 
         // Ensure the current window is active

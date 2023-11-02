@@ -29,5 +29,6 @@
     <PackageVersion Include="Uno.Material.WinUI.Markup" Version="4.1.0-dev.1" />
     <PackageVersion Include="Uno.Themes.WinUI.Markup" Version="4.1.0-dev.1" />
     <PackageVersion Include="SkiaSharp.Views.WinUI" Version="2.88.6" />
+    <PackageVersion Include="Uno.Extensions.Reactive.WinUI" Version="3.1.0-dev.3" />
   </ItemGroup>
 </Project>

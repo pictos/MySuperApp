@@ -39,7 +39,7 @@ partial class Shell : Page
     static readonly ReadOnlyDictionary<AppPages, Page> pages = new Dictionary<AppPages, Page>()
     {
         { Player, new PlayerPage() },
-        { Search, new MainPage() }
+        { Search, new SearchPage() }
     }.AsReadOnly();
 
     void OnNavigationViewSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
