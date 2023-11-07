@@ -18,6 +18,19 @@ static class Sugar
         return view;
     }
     
+    public static T Grid<T>(this T element, Enum row, Enum column)
+    where T : UIElement
+    {
+        return Sugar.Grid(element, Convert.ToInt32(row), Convert.ToInt32(column));
+    }
+    
+    
+    public static T Grid<T>(this T element, Enum row, int column)
+        where T : UIElement
+    {
+        return Sugar.Grid(element, Convert.ToInt32(row), column);
+    }
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T Vertical<T>(this T element)
         where T : StackPanel =>

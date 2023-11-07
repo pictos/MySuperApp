@@ -54,7 +54,7 @@ public sealed partial class MainPage : Page
 
             Task.Delay(1000, cts.Token).ContinueWith(task =>
             {
-                if (task.IsFaulted && task.Exception != null)
+                if (task is { IsFaulted: true, Exception: not null })
                 {
                     throw task.Exception;
                 }

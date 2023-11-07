@@ -62,13 +62,13 @@ public partial class SearchPage : Page
                     .Grid(rowSpan: 3),
                 new TextBox()
                     .PlaceholderText("Search...")
-                    .Grid((int)PageRows.Search, 0)
+                    .Grid(PageRows.Search, 0)
                     .Foreground(Colors.Black)
                     .Margin(5)
                     .Text(x => x.Bind(() => vm.Query).Mode(BindingMode.TwoWay)),
                 new ListView()
                     .ItemsSource(() => vm.Results)
-                    .Grid((int)PageRows.ListView, 0)
+                    .Grid(PageRows.ListView, 0)
                     .Visibility(builder => SetVisibility(builder, vm))
                     .ItemTemplate<SearchResult>
                     (result =>
@@ -97,7 +97,7 @@ public partial class SearchPage : Page
                 ,
                 new Button()
                     .Content("Search")
-                    .Grid((int)PageRows.Button, 0)
+                    .Grid(PageRows.Button, 0)
                     .MinWidth(100)
                     .HorizontalAlignment(HorizontalAlignment.Center)
                     .Assign(out var btn)

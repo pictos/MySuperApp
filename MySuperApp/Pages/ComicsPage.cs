@@ -4,35 +4,54 @@ namespace MySuperApp.Pages;
 
 public partial class ComicsPage : Page
 {
-    const string comicUrl = "https://xkcd.com/927/";
+    const string comicUrl = "https://imgs.xkcd.com/comics/standards_2x.png";
 
     public ComicsPage()
     {
         this.DataContext(new BindableWeatherModel(new WeatherService()), (page, vm) =>
         {
-            new FeedView()
-                .Background(Colors.Black)
-                .Source(() => vm.CurrentWeather)
-                .DataTemplate(s =>
-                {
-                    new StackPanel().DataContext(() => vm.Model)
-                        .Children
-                        (
-                            new TextBlock()
-                                .Text(x => x.Bind("Temperature")
-                                .Mode(BindingMode.TwoWay))
-                                .VerticalAlignment(VerticalAlignment.Center)
-                                .HorizontalAlignment(HorizontalAlignment.Center)
-                                .FontSize(32),
-                            new Button().Content("Refresh")
-                        );
-                })
-                .ProgressTemplate<StackPanel>(s => s.Children
+            page.Padding(58)
+                .Background(Colors.Fuchsia)
+                .Content
                 (
-                    new TextBlock().Text("Loading...")
-                ));
-
+                    new Image()
+                        .Source(new Uri(comicUrl))
+                        .HorizontalAlignment(HorizontalAlignment.Center)
+                        .VerticalAlignment(VerticalAlignment.Center)
+                        // .Height(300)
+                        // .Width(300)
+                        .Stretch(Stretch.Uniform)
+                        .Background(Colors.Black)
+                        // .HandleLoadError((s, e) =>
+                        // {
+                        //     _ = e.ErrorMessage;
+                        // })
+                    
+                    // new FeedView()
+                    //     .Background(Colors.Black)
+                    //     .Source(() => vm.CurrentWeather)
+                    //     .DataTemplate(s => FeedTemplate())
+                );
         });
+    }
+    
+
+
+    static StackPanel FeedTemplate()
+    {
+        return new StackPanel()
+            .Children
+             (
+                 new TextBlock()
+                     //This is generating a build error
+                     //.DataContext( x => x.Bind("Data"))
+                     .Text(x => x.Bind("Temperature")
+                         .Mode(BindingMode.TwoWay))
+                     .VerticalAlignment(VerticalAlignment.Center)
+                     .HorizontalAlignment(HorizontalAlignment.Center)
+                     .FontSize(32),
+                 new Button().Content("Refresh")
+             );   
     }
 }
 
