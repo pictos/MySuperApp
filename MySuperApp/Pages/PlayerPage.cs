@@ -28,11 +28,11 @@ internal partial class PlayerPage : Page
         storyboard = RotateAnimation();
 
         this.Resources(r => r.Add("rotateImg",   storyboard).Add(buttonStyle));
-       // storyboard.Begin();
+        storyboard.Begin();
 
         Grid MainContent(PlayerViewModel vm) => new Grid().Children
         (
-            CircleImageGrid(vm).Grid(1)
+            CircleImageGrid(vm).Grid(1,0)
         ).RowDefinitions("100,*,100")
             .Resources(r => r.Add(buttonStyle));
 
@@ -73,8 +73,8 @@ internal partial class PlayerPage : Page
                 .VerticalAlignment(VerticalAlignment.Center)
                 .Background("#DE5154")
                 .CornerRadius(30),
-                MusicInfo(vm).Grid(1),
-                PlayerCommands().Grid(2)
+                MusicInfo(vm).Grid(1,0),
+                PlayerCommands().Grid(2,0)
             ).RowDefinitions("*, 48");
             btn.Click += (s, e) => storyboard.Begin();
 

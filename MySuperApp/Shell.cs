@@ -14,19 +14,20 @@ partial class Shell : Page
             .Assign(out var navigationView)
             .IsSettingsVisible(false)
             .IsBackButtonVisible(NavigationViewBackButtonVisible.Collapsed)
-            .PaneDisplayMode(NavigationViewPaneDisplayMode.LeftMinimal)
+            .PaneDisplayMode(NavigationViewPaneDisplayMode.Auto)
             .MenuItems
             (
                 new NavigationViewItem().Content(Player),
-                new NavigationViewItem().Content(Search)
+                new NavigationViewItem().Content(Search),
+                new NavigationViewItem().Content(Comics)
             )
             .Content
             (
                 new Grid().Children
                 (
-                    new Frame().Assign(out contentFrame).Grid(1)
+                    new Frame().Assign(out contentFrame).Grid(row:1)
                 )
-                .RowDefinitions("48, *")
+                .RowDefinitions("10, *")
             )
             .SelectionChanged += OnNavigationViewSelectionChanged;
 
@@ -39,7 +40,8 @@ partial class Shell : Page
     static readonly ReadOnlyDictionary<AppPages, Page> pages = new Dictionary<AppPages, Page>()
     {
         { Player, new PlayerPage() },
-        { Search, new SearchPage() }
+        { Search, new SearchPage() },
+        { Comics, new ComicsPage() }
     }.AsReadOnly();
 
     void OnNavigationViewSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -54,6 +56,9 @@ partial class Shell : Page
             case Player:
                 contentFrame.Content = pages[Player];
                 break;
+            case Comics:
+                contentFrame.Content = pages[Comics];
+                break;
         }
     }
 }
@@ -61,5 +66,6 @@ partial class Shell : Page
 enum AppPages
 {
     Player,
-    Search
+    Search,
+    Comics
 }

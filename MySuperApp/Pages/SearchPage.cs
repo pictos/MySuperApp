@@ -15,9 +15,10 @@ public partial class SearchPage : Page
 		{
 			page
 			.Background(Colors.White)
-			.Content(MainContent(vm))
-			.Padding(58);
-		});
+			.Content(MainContent(vm).Assign(out var grid))
+			.Padding(0,58,0,20);
+
+        });
 
 
 		//this.DataContext(new BindableSearchModel(), (page, vm) =>
@@ -40,56 +41,101 @@ public partial class SearchPage : Page
 			.Background(Colors.Black);
 	}
 
-	static Grid MainContent(SearchViewModel vm) => new Grid().RowDefinitions("auto, *, auto")
-			.Children
-			(
-			new ProgressRing()
-				.Width(100)
-				.Height(100)
-				.HorizontalAlignment(HorizontalAlignment.Center)
-				.VerticalAlignment(VerticalAlignment.Center)
-				.IsActive(() => vm.SearchExecuteCommand.IsRunning)
-				.Grid(rowSpan: 3),
-			new TextBox()
-				.PlaceholderText("Search...")
-				.Grid(0, 0)
-				.Foreground(Colors.Black)
-				.Margin(5)
-				.Text(x => x.Bind(() => vm.Query).Mode(BindingMode.TwoWay)),
-			new ListView()
-				.ItemsSource(() => vm.Results)
-				.Grid(1, 0)
-				.ItemTemplate<SearchResult>
-				(result =>
-						new Grid().Children
-						(
-							new Image().Source(() => result.ImageUrl).Grid(row: 0, rowSpan: 2).Stretch(Stretch.Uniform),
-							new StackPanel()
-							.Padding(5)
-							.Background("#99000000")
-							.Children
-							(
-								new TextBlock()
-								.Text(() => result.Title)
-								.Foreground(Colors.White)
-								.VerticalAlignment(VerticalAlignment.Center)
-								.TextWrapping(TextWrapping.WrapWholeWords),
-								new TextBlock().Foreground(Colors.White).Text(() => result.Duration)
-							).Grid(1, 0)
-						).RowDefinitions("* , auto")
-						.RowSpacing(16)
-				)
+    enum PageRows
+    {
+        Search = 0,
+        ListView = 1,
+        Button = 2
+    }
+    
+    Grid MainContent(SearchViewModel vm)
+    {
+        var grid =  new Grid().RowDefinitions("auto, *, auto")
+            .Children
+            (
+                new ProgressRing()
+                    .Width(100)
+                    .Height(100)
+                    .HorizontalAlignment(HorizontalAlignment.Center)
+                    .VerticalAlignment(VerticalAlignment.Center)
+                    .IsActive(() => vm.SearchExecuteCommand.IsRunning)
+                    .Grid(rowSpan: 3),
+                new TextBox()
+                    .PlaceholderText("Search...")
+                    .Grid((int)PageRows.Search, 0)
+                    .Foreground(Colors.Black)
+                    .Margin(5)
+                    .Text(x => x.Bind(() => vm.Query).Mode(BindingMode.TwoWay)),
+                new ListView()
+                    .ItemsSource(() => vm.Results)
+                    .Grid((int)PageRows.ListView, 0)
+                    .Visibility(builder => SetVisibility(builder, vm))
+                    .ItemTemplate<SearchResult>
+                    (result =>
+                        new Grid().Children
+                            (
+                                new Image().Source(() => result.ImageUrl).Grid(row: 0, rowSpan: 2)
+                                    .Stretch(Stretch.Uniform),
+                                new StackPanel()
+                                    .Padding(5)
+                                    .Background("#99000000")
+                                    .Children
+                                    (
+                                        new TextBlock()
+                                            .Text(() => result.Title)
+                                            .Foreground(Colors.White)
+                                            .VerticalAlignment(VerticalAlignment.Center)
+                                            .TextWrapping(TextWrapping.WrapWholeWords),
+                                        new TextBlock().Foreground(Colors.White).Text(() => result.Duration)
+                                    ).Grid(1, 0)
+                            ).RowDefinitions("* , auto")
+                            .RowSpacing(16)
+                    )
 
-				//TODO: report bug where Visibility breaks if appears before the Itemtemplate method
-				.Visibility(builder => SetVisibility(builder, vm)),
-			new Button()
-				.Content("Search")
-				.Grid(2, 0)
-				.MinWidth(100)
-				.HorizontalAlignment(HorizontalAlignment.Center)
-				.Assign(out var btn)
-				.Command(() => vm.SearchExecuteCommand)
-			   );
+                //TODO: report bug where Visibility breaks if appears before the Itemtemplate method
+                // .Visibility(builder => SetVisibility(builder, vm))
+                ,
+                new Button()
+                    .Content("Search")
+                    .Grid((int)PageRows.Button, 0)
+                    .MinWidth(100)
+                    .HorizontalAlignment(HorizontalAlignment.Center)
+                    .Assign(out var btn)
+                    .Command(() => vm.SearchExecuteCommand)
+            );
+        
+        SetupVisualStateManager();
+        return grid;
+        
+        Grid SetupVisualStateManager()
+        {
+            btn.Click += (_, __) =>
+            {
+                VisualStateManager.GoToState(this, "Entered", true);
+            };
+
+            btn.PointerExited += (_, __) =>
+            {
+                VisualStateManager.GoToState(this, "Exited", true);
+            };
+
+            btn.PointerEntered += (_, __) =>
+            {
+                VisualStateManager.GoToState(this, "Entered", true);
+            };
+        
+            grid.VisualStateManager
+            (b =>
+                b.Group("SearchButtonState", gb =>
+                    gb.State("Entered", sb => 
+                            sb.Setters(btn, e => e.Width(400)))
+                        .State("Exited", sb =>
+                            sb.Setters(btn, e => e.Width(100))))
+            );
+
+            return grid;
+        }
+    }
 
 	static void SetVisibility(IDependencyPropertyBuilder<Visibility> builder, SearchViewModel vm)
 	{
