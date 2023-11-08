@@ -8,6 +8,7 @@ internal partial class MediaCell : UserControl
 		{
 			cell.Content(
 				new Grid()
+				.Margin(0,10)
 				.MinHeight(300)
 				.Children
 					(
@@ -29,6 +30,6 @@ internal partial class MediaCell : UserControl
 					.RowSpacing(16)
 		);
 		});
-		
+
 	}
 }
