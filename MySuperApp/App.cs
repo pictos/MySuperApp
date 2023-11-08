@@ -6,14 +6,18 @@ public class App : Application
 
     internal static bool IsLoaded { get; private set; }
 
+    internal static Windows.Foundation.Rect Bounds { get; private set; }
+
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
 #if NET6_0_OR_GREATER && WINDOWS && !HAS_UNO
-        MainWindow = new Window();
+		MainWindow = new Window();
 #else
         MainWindow = Microsoft.UI.Xaml.Window.Current;
 #endif
+        Bounds = MainWindow.Bounds;
 
+        MainWindow.SizeChanged += OnMainWindowSizeChanged;
 
         // Do not repeat app initialization when the Window already has content,
         // just ensure that the window is active
@@ -31,18 +35,23 @@ public class App : Application
         if (rootFrame.Content == null)
         {
             // The navigate method is throwing on Windows
-            // rootFrame.Content = new Shell();
+            rootFrame.Content = new Shell();
 
 
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
             // parameter
-            rootFrame.Navigate(typeof(Shell), args.Arguments);
+            // rootFrame.Navigate(typeof(Shell), args.Arguments);
         }
 
         // Ensure the current window is active
         MainWindow.Activate();
         IsLoaded = true;
+    }
+
+    private void OnMainWindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
+    {
+        Bounds = MainWindow!.Bounds;
     }
 
     /// <summary>

@@ -28,6 +28,7 @@
     <PackageReference Include="Uno.Themes.WinUI.Markup" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
     <PackageReference Include="Uno.Extensions.Logging.OSLog" />
+		<PackageReference Include="Uno.WinUI.Lottie" />
     <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" />
     <PackageReference Include="Uno.WinUI.DevServer" Condition="'$(Configuration)'=='Debug'" />
   </ItemGroup>
